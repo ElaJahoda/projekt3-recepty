@@ -18,7 +18,7 @@ recept-hodnoceni, recept-nazev, recept-popis.
 6) Poslední vybraný recept ulož do Local Storage, aby se při novém otevření aplikace načetl.
 */
 var kontejner = document.querySelector('.kontejner');
-
+var receptyId = document.querySelector('#recepty');
 generovaniReceptu();
 
 function generovaniReceptu() {
@@ -38,7 +38,7 @@ function generovaniReceptu() {
         let nazev = document.createElement('h3');
         nazev.textContent = recepty[i].nadpis;
 
-        kontejner.appendChild(recept);
+        receptyId.appendChild(recept);
         recept.appendChild(receptObrazek);
         receptObrazek.appendChild(obrazek);
         recept.appendChild(receptInfo);
