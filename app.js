@@ -19,6 +19,7 @@ recept-hodnoceni, recept-nazev, recept-popis.
 */
 var kontejner = document.querySelector('.kontejner');
 var receptyId = document.querySelector('#recepty');
+var tlacitko = document.querySelector('button');
 generovaniReceptu();
 
 function generovaniReceptu() {
@@ -45,3 +46,26 @@ function generovaniReceptu() {
         receptInfo.appendChild(nazev);
     }
 }
+
+tlacitko.addEventListener('click', filtrace);
+
+function filtrace() {
+    let poleNazvy = [];
+    for(i = 0; i < recepty.length; i++) {
+        poleNazvy.push(recepty[i].nadpis);
+    }
+    console.log(poleNazvy);
+    let hodnotaText = document.querySelector('#hledat').value;
+    console.log(hodnotaText);
+    if(hodnotaText === null || hodnotaText === undefined || hodnotaText === "") {
+        console.log('nic');
+    } else {
+        console.log(filterItems(poleNazvy, hodnotaText));
+    }
+}
+
+function filterItems(arr, query) {
+    return arr.filter(function(el) {
+        return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    })
+    }
