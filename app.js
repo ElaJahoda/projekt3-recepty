@@ -18,54 +18,78 @@ recept-hodnoceni, recept-nazev, recept-popis.
 6) Poslední vybraný recept ulož do Local Storage, aby se při novém otevření aplikace načetl.
 */
 var kontejner = document.querySelector('.kontejner');
-var receptyId = document.querySelector('#recepty');
+// var receptyId = document.querySelector('.recepty');
 var tlacitko = document.querySelector('button');
-generovaniReceptu();
+generovaniSeznamu();
 
-function generovaniReceptu() {
+function generovaniSeznamu() {
+    generovaniReceptyId();
     for(i = 0; i < recepty.length; i++) {
-        let recept = document.createElement('div');
-        recept.className = 'recept';
-
-        let receptObrazek = document.createElement('div');
-        receptObrazek.className = 'recept-obrazek';
-
-        let obrazek = document.createElement('img');
-        obrazek.src = recepty[i].img;
-
-        let receptInfo = document.createElement('div');
-        receptInfo.className = 'recept-info';
-
-        let nazev = document.createElement('h3');
-        nazev.textContent = recepty[i].nadpis;
-
-        receptyId.appendChild(recept);
-        recept.appendChild(receptObrazek);
-        receptObrazek.appendChild(obrazek);
-        recept.appendChild(receptInfo);
-        receptInfo.appendChild(nazev);
+        generovaniPolozky(i);
     }
+}
+
+function generovaniReceptyId() {
+        let receptyId = document.createElement('div');
+        receptyId.className = 'recepty';
+        receptyId.setAttribute('id', 'recepty');
+        kontejner.appendChild(receptyId);
+}
+
+function generovaniPolozky(i) {
+    let recept = document.createElement('div');
+    recept.className = 'recept';
+
+    let receptObrazek = document.createElement('div');
+    receptObrazek.className = 'recept-obrazek';
+
+    let obrazek = document.createElement('img');
+    obrazek.src = recepty[i].img;
+
+    let receptInfo = document.createElement('div');
+    receptInfo.className = 'recept-info';
+
+    let nazev = document.createElement('h3');
+    nazev.textContent = recepty[i].nadpis;
+
+    let receptyId = document.querySelector('.recepty');
+
+    receptyId.appendChild(recept);
+    recept.appendChild(receptObrazek);
+    receptObrazek.appendChild(obrazek);
+    recept.appendChild(receptInfo);
+    receptInfo.appendChild(nazev);
 }
 
 tlacitko.addEventListener('click', filtrace);
 
-function filtrace() {
-    let poleNazvy = [];
-    for(i = 0; i < recepty.length; i++) {
+var poleNazvy = [];
+   for(i = 0; i < recepty.length; i++) {
         poleNazvy.push(recepty[i].nadpis);
     }
-    console.log(poleNazvy);
+
+function filtrace() {
+    smazaniSeznamu();
     let hodnotaText = document.querySelector('#hledat').value;
-    console.log(hodnotaText);
     if(hodnotaText === null || hodnotaText === undefined || hodnotaText === "") {
-        console.log('nic');
+        generovaniSeznamu();
     } else {
-        console.log(filterItems(poleNazvy, hodnotaText));
+        let filtrNazvyPole = filterItems(poleNazvy, hodnotaText);
+        generovaniReceptyId();
+        for(i = 0; i < filtrNazvyPole.length; i++){
+            let index = poleNazvy.indexOf(filtrNazvyPole[i]);
+            generovaniPolozky(index);}
     }
+    
 }
 
 function filterItems(arr, query) {
     return arr.filter(function(el) {
         return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
     })
-    }
+}
+
+function smazaniSeznamu() {
+    let receptyId = document.querySelector('.recepty');
+        kontejner.removeChild(receptyId);
+}
