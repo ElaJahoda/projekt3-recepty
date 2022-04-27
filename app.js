@@ -18,7 +18,6 @@ recept-hodnoceni, recept-nazev, recept-popis.
 6) Poslední vybraný recept ulož do Local Storage, aby se při novém otevření aplikace načetl.
 */
 var kontejner = document.querySelector('.kontejner');
-// var receptyId = document.querySelector('.recepty');
 var tlacitko = document.querySelector('button');
 generovaniSeznamu();
 
@@ -39,7 +38,7 @@ function generovaniReceptyId() {
 function generovaniPolozky(i) {
     let recept = document.createElement('div');
     recept.className = 'recept';
-
+    recept.dataset.index = i;
     let receptObrazek = document.createElement('div');
     receptObrazek.className = 'recept-obrazek';
 
@@ -59,6 +58,18 @@ function generovaniPolozky(i) {
     receptObrazek.appendChild(obrazek);
     recept.appendChild(receptInfo);
     receptInfo.appendChild(nazev);
+    
+    console.log(recept.dataset.index);
+    recept.addEventListener('click', detailPolozky(recept));
+}
+
+function detailPolozky(recept) {
+    let i = parseInt(recept.dataset.index);
+    document.querySelector("#recept-foto"). src = recepty[i].img;
+    document.querySelector('#recept-kategorie').textContent = recepty[i].kategorie;
+    document.querySelector('#recept-hodnoceni').textContent = recepty[i].hodnoceni;
+    document.querySelector('#recept-nazev').textContent = recepty[i].nadpis;
+    document.querySelector('#recept-popis').textContent = recepty[i].popis; 
 }
 
 tlacitko.addEventListener('click', filtrace);
@@ -76,11 +87,11 @@ function filtrace() {
     } else {
         let filtrNazvyPole = filterItems(poleNazvy, hodnotaText);
         generovaniReceptyId();
-        for(i = 0; i < filtrNazvyPole.length; i++){
+        for(i = 0; i < filtrNazvyPole.length; i++) {
             let index = poleNazvy.indexOf(filtrNazvyPole[i]);
-            generovaniPolozky(index);}
+            generovaniPolozky(index);
+        }
     }
-    
 }
 
 function filterItems(arr, query) {
@@ -91,5 +102,5 @@ function filterItems(arr, query) {
 
 function smazaniSeznamu() {
     let receptyId = document.querySelector('.recepty');
-        kontejner.removeChild(receptyId);
+    kontejner.removeChild(receptyId);
 }
