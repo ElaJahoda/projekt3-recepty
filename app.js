@@ -19,6 +19,8 @@ recept-hodnoceni, recept-nazev, recept-popis.
 */
 var kontejner = document.querySelector('.kontejner');
 var tlacitko = document.querySelector('button');
+var kategorie = document.querySelector('#kategorie');
+var razeni = document.querySelector('#razeni');
 generovaniSeznamu();
 
 function generovaniSeznamu() {
@@ -59,13 +61,11 @@ function generovaniPolozky(i) {
     recept.appendChild(receptInfo);
     receptInfo.appendChild(nazev);
     
-    console.log(recept.dataset.index);
-    recept.addEventListener('click', detailPolozky(recept));
+    recept.addEventListener('click', detailPolozky(i));
 }
 
-function detailPolozky(recept) {
-    let i = parseInt(recept.dataset.index);
-    document.querySelector("#recept-foto"). src = recepty[i].img;
+function detailPolozky(i) {
+    document.querySelector('#recept-foto'). src = recepty[i].img;
     document.querySelector('#recept-kategorie').textContent = recepty[i].kategorie;
     document.querySelector('#recept-hodnoceni').textContent = recepty[i].hodnoceni;
     document.querySelector('#recept-nazev').textContent = recepty[i].nadpis;
@@ -78,25 +78,41 @@ var poleNazvy = [];
    for(i = 0; i < recepty.length; i++) {
         poleNazvy.push(recepty[i].nadpis);
     }
+var poleKategorie = [];
+    for(i = 0; i < recepty.length; i++) {
+        poleKategorie.push(recepty[i].kategorie);
+    }
 
 function filtrace() {
     smazaniSeznamu();
     let hodnotaText = document.querySelector('#hledat').value;
-    if(hodnotaText === null || hodnotaText === undefined || hodnotaText === "") {
+    let hodnotaKategorie = kategorie.value; 
+    let hodnotaRazeni = razeni.value;
+    if(hodnotaText === "" && hodnotaKategorie === "" && hodnotaRazeni === "") {
         generovaniSeznamu();
-    } else {
+    } else  if(hodnotaText !== "") {
         let filtrNazvyPole = filterItems(poleNazvy, hodnotaText);
         generovaniReceptyId();
         for(i = 0; i < filtrNazvyPole.length; i++) {
             let index = poleNazvy.indexOf(filtrNazvyPole[i]);
             generovaniPolozky(index);
         }
+    } else if(hodnotaRazeni !== "") {        
+        if(hodnotaRazeni == 2) {
+        recepty.sort(function (a, b) {
+            return a.hodnoceni - b.hodnoceni;
+        })} 
+        if(hodnotaRazeni == 1) {
+            recepty.sort(function (a, b) {
+            return b.hodnoceni - a.hodnoceni;  
+        })}
+        generovaniSeznamu();
     }
 }
 
-function filterItems(arr, query) {
-    return arr.filter(function(el) {
-        return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+function filterItems(pole, hodnota) {   
+    return pole.filter(function(el) {
+         return el.toLowerCase().indexOf(hodnota.toLowerCase()) !== -1
     })
 }
 
