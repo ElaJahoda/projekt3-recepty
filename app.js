@@ -90,16 +90,10 @@ function filtrace() {
     let hodnotaRazeni = razeni.value;
     if(hodnotaText === "" && hodnotaKategorie === "" && hodnotaRazeni === "") {
         generovaniSeznamu();
-    } else  if(hodnotaText !== "") {
-        let filtrNazvyPole = filterItems(poleNazvy, hodnotaText);
-        generovaniReceptyId();
-        for(i = 0; i < filtrNazvyPole.length; i++) {
-            let index = poleNazvy.indexOf(filtrNazvyPole[i]);
-            generovaniPolozky(index);
-        }
-    } else if(hodnotaRazeni !== "") {        
+    }
+    if(hodnotaRazeni !== "") {        
         if(hodnotaRazeni == 2) {
-        recepty.sort(function (a, b) {
+            recepty.sort(function (a, b) {
             return a.hodnoceni - b.hodnoceni;
         })} 
         if(hodnotaRazeni == 1) {
@@ -107,10 +101,32 @@ function filtrace() {
             return b.hodnoceni - a.hodnoceni;  
         })}
         generovaniSeznamu();
-    }
-}
+        } 
+    if(hodnotaText !== "") {
+        let filtrNazvyPole = filterText(poleNazvy, hodnotaText);
+        generovaniReceptyId();
+        for(i = 0; i < filtrNazvyPole.length; i++) {
+            let index = poleNazvy.indexOf(filtrNazvyPole[i]);
+            generovaniPolozky(index);
+        }} 
+    else if (hodnotaKategorie !== "") {
+        let filtrKategoriePoleI = [];
+        filtrKategorie(poleKategorie, hodnotaKategorie, filtrKategoriePoleI);
+        generovaniReceptyId();
+        for(i = 0; i < filtrKategoriePoleI.length; i++) {
+        generovaniPolozky(filtrKategoriePoleI[i]);}
+}}
 
-function filterItems(pole, hodnota) {   
+function filtrKategorie(pole, hodnota, arry) {
+    for ( i=0; i < pole.length; i++ ){
+        if ( pole[i] == hodnota){
+            arry.push(i)
+        }
+    }
+    return arry;
+} 
+
+function filterText(pole, hodnota) {   
     return pole.filter(function(el) {
          return el.toLowerCase().indexOf(hodnota.toLowerCase()) !== -1
     })
