@@ -28,6 +28,9 @@ function generovaniSeznamu() {
     for(i = 0; i < recepty.length; i++) {
         generovaniPolozky(i);
     }
+    if(localStorage.indexPolozky !== "") {
+        let item = localStorage.getItem('indexPolozky');
+        detailPolozky(item);}
 }
 
 function generovaniReceptyId() {
@@ -60,6 +63,7 @@ function generovaniPolozky(i) {
     receptObrazek.appendChild(obrazek);
     recept.appendChild(receptInfo);
     receptInfo.appendChild(nazev);
+
     recept.addEventListener('click', () => detailPolozky(i))
 }
 
@@ -68,7 +72,9 @@ function detailPolozky(i) {
     document.querySelector('#recept-kategorie').textContent = recepty[i].kategorie;
     document.querySelector('#recept-hodnoceni').textContent = recepty[i].hodnoceni;
     document.querySelector('#recept-nazev').textContent = recepty[i].nadpis;
-    document.querySelector('#recept-popis').textContent = recepty[i].popis; 
+    document.querySelector('#recept-popis').textContent = recepty[i].popis;     
+    localStorage.clear();
+    localStorage.setItem('indexPolozky', i);
 }
 
 tlacitko.addEventListener('click', filtrace);
