@@ -60,12 +60,11 @@ function generovaniPolozky(i) {
     receptObrazek.appendChild(obrazek);
     recept.appendChild(receptInfo);
     receptInfo.appendChild(nazev);
-    
-    recept.addEventListener('click', detailPolozky(i));
+    recept.addEventListener('click', () => detailPolozky(i))
 }
 
 function detailPolozky(i) {
-    document.querySelector('#recept-foto'). src = recepty[i].img;
+    document.querySelector('#recept-foto').src = recepty[i].img;
     document.querySelector('#recept-kategorie').textContent = recepty[i].kategorie;
     document.querySelector('#recept-hodnoceni').textContent = recepty[i].hodnoceni;
     document.querySelector('#recept-nazev').textContent = recepty[i].nadpis;
