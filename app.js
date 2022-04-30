@@ -21,12 +21,22 @@ var kontejner = document.querySelector('.kontejner');
 var tlacitko = document.querySelector('button');
 var kategorie = document.querySelector('#kategorie');
 var razeni = document.querySelector('#razeni');
+var aktualniSeznamPole = [];
 generovaniSeznamu();
-
+    console.log(aktualniSeznamPole);
 function generovaniSeznamu() {
+
     generovaniReceptyId();
+    if(aktualniSeznamPole.length === 0) {
     for(i = 0; i < recepty.length; i++) {
         generovaniPolozky(i);
+        aktualniSeznamPole.push(recepty[i]);
+        console.log('jedu1');
+    }} else {
+        for(i = 0; i < aktualniSeznamPole.length; i++) {
+        generovaniPolozky(i);
+    }
+
     }
     if(localStorage.indexPolozky !== "") {
         let item = localStorage.getItem('indexPolozky');
@@ -43,7 +53,6 @@ function generovaniReceptyId() {
 function generovaniPolozky(i) {
     let recept = document.createElement('div');
     recept.className = 'recept';
-    recept.dataset.index = i;
     let receptObrazek = document.createElement('div');
     receptObrazek.className = 'recept-obrazek';
 
@@ -80,47 +89,52 @@ function detailPolozky(i) {
 tlacitko.addEventListener('click', filtrace);
 
 var poleNazvy = [];
-   for(i = 0; i < recepty.length; i++) {
-        poleNazvy.push(recepty[i].nadpis);
+   for(i = 0; i < aktualniSeznamPole.length; i++) {
+        poleNazvy.push(aktualniSeznamPole[i].nadpis);
     }
 var poleKategorie = [];
-    for(i = 0; i < recepty.length; i++) {
-        poleKategorie.push(recepty[i].kategorie);
+    for(i = 0; i < aktualniSeznamPole.length; i++) {
+        poleKategorie.push(aktualniSeznamPole[i].kategorie);
     }
 
+
 function filtrace() {
+    aktualniSeznamPole = [];
     smazaniSeznamu();
     let hodnotaText = document.querySelector('#hledat').value;
     let hodnotaKategorie = kategorie.value; 
     let hodnotaRazeni = razeni.value;
     if(hodnotaText === "" && hodnotaKategorie === "" && hodnotaRazeni === "") {
-        generovaniSeznamu();
     }
-    if(hodnotaRazeni !== "") {        
+    if(hodnotaRazeni !== "") {  
         if(hodnotaRazeni == 2) {
             recepty.sort(function (a, b) {
             return a.hodnoceni - b.hodnoceni;
-        })} 
+        })
+        } 
         if(hodnotaRazeni == 1) {
             recepty.sort(function (a, b) {
             return b.hodnoceni - a.hodnoceni;  
-        })}
-        generovaniSeznamu();
-        } 
+        })
+        }
+        pushDoAktualnihoSeznamuPole(recepty);
+    } 
     if(hodnotaText !== "") {
         let filtrNazvyPole = filterText(poleNazvy, hodnotaText);
-        generovaniReceptyId();
+        console.log(filtrNazvyPole);
+        let filtrNazvyPoleI = [];
         for(i = 0; i < filtrNazvyPole.length; i++) {
-            let index = poleNazvy.indexOf(filtrNazvyPole[i]);
-            generovaniPolozky(index);
-        }} 
+            filtrNazvyPoleI.push(poleNazvy.indexOf(filtrNazvyPole[i]));
+        }
+        pushDoAktualnihoSeznamuPole(filtrNazvyPoleI);
+    } 
     else if (hodnotaKategorie !== "") {
         let filtrKategoriePoleI = [];
         filtrKategorie(poleKategorie, hodnotaKategorie, filtrKategoriePoleI);
-        generovaniReceptyId();
-        for(i = 0; i < filtrKategoriePoleI.length; i++) {
-        generovaniPolozky(filtrKategoriePoleI[i]);}
-}}
+        pushDoAktualnihoSeznamuPole(filtrKategoriePoleI)
+    }
+    generovaniSeznamu();
+}
 
 function filtrKategorie(pole, hodnota, arry) {
     for ( i=0; i < pole.length; i++ ){
@@ -140,4 +154,10 @@ function filterText(pole, hodnota) {
 function smazaniSeznamu() {
     let receptyId = document.querySelector('.recepty');
     kontejner.removeChild(receptyId);
+}
+
+function pushDoAktualnihoSeznamuPole(pole) {
+    for(i = 0; i < pole.length; i++) {
+        aktualniSeznamPole.push(recepty[pole])
+    }
 }
