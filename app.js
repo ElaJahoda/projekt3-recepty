@@ -96,7 +96,7 @@ function filtrace() {
     if(hodnotaText === "" && hodnotaKategorie === "" && hodnotaRazeni === "") {
         generovaniSeznamu();
     }
-    if(hodnotaRazeni !== "") {        
+    else if(hodnotaRazeni !== "" && hodnotaText === "" && hodnotaKategorie === "") {        
         if(hodnotaRazeni == 2) {
             recepty.sort(function (a, b) {
             return a.hodnoceni - b.hodnoceni;
@@ -106,21 +106,31 @@ function filtrace() {
             return b.hodnoceni - a.hodnoceni;  
         })}
         generovaniSeznamu();
-        } 
-    if(hodnotaText !== "") {
+    }
+    else if(hodnotaText !== "" && hodnotaRazeni === "" && hodnotaKategorie === "") {
         let filtrNazvyPole = filterText(poleNazvy, hodnotaText);
         generovaniReceptyId();
         for(i = 0; i < filtrNazvyPole.length; i++) {
             let index = poleNazvy.indexOf(filtrNazvyPole[i]);
             generovaniPolozky(index);
-        }} 
-    else if (hodnotaKategorie !== "") {
+        }
+    }
+    else if (hodnotaKategorie !== "" && hodnotaRazeni === "" && hodnotaText === "") {
         let filtrKategoriePoleI = [];
         filtrKategorie(poleKategorie, hodnotaKategorie, filtrKategoriePoleI);
         generovaniReceptyId();
         for(i = 0; i < filtrKategoriePoleI.length; i++) {
-        generovaniPolozky(filtrKategoriePoleI[i]);}
-}}
+            generovaniPolozky(filtrKategoriePoleI[i]);
+        }
+    }
+    else {
+        hodnotaText = "";
+        hodnotaKategorie = "";
+        hodnotaRazeni = "";
+        alert('Lze filtrovat pouze dle jednoho parametru. Obnov stránku a opakuj hledaní.');
+        generovaniSeznamu();
+    }
+}
 
 function filtrKategorie(pole, hodnota, arry) {
     for ( i=0; i < pole.length; i++ ){
